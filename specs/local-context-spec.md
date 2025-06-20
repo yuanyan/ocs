@@ -3,7 +3,8 @@
 Status: `REVIEW`
 
 Versions:
- - (Current) 1.0.0: Initial specification
+
+- (Current) 1.0.0: Initial specification
 
 ## Summary
 
@@ -48,7 +49,6 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 - **Context configuration**: a configuration file that provides additional rules for searching and filtering context to an AI system while it is running within AI working directory.
 - **Ancestor context**: When AI systems have a specific mounted directory (typically a project directory) and the AI working directory is at a nested directory, all context and configuration between these two directories is the ancestor context. For example, if the mounted directory is `~/myproject` and the AI working directory is `~/myproject/nested/paths/feature/` then context and context configuration that might exist within `feature`, `paths`, `nested`, `myproject` are the entirety of possible ancestor context.
 - **Glob pattern**: A string pattern that is used to match file paths. This specification uses the [glob](https://en.wikipedia.org/wiki/Glob_(programming)) syntax inclusive of the `**` pattern. Glob patterns must also be treated as case insensitive.
-
 
 ### Scope requirements
 
@@ -141,6 +141,7 @@ AI systems MUST validate the configuration file based on the above type signatur
 ### Merging algorithm for context and configuration
 
 The merging algorithm for context and configuration is as follows:
+
 1. source all context files and context configuration files based on the supported context scopes (global, static directory, dynamic subdirectory).
 2. create a list of absolute paths for context files and track which files are from which context scope.
 3. order all context configuration files based on the following precedence order where the closer to the AI working directory the configuration is, the higher priority it has:
@@ -191,7 +192,6 @@ For example, if the mounted directory is `~/myproject` and the AI working direct
 
 AI systems MAY cache these lookups to improve performance for many directory lookups.
 
-
 ### Context file formats
 
 There are no active standards around context file formats. The following is the industry best current practices for context files formats while improved standards are being formalized.
@@ -200,7 +200,6 @@ There are no active standards around context file formats. The following is the 
 Files with the `.md` extension represent markdown files. AI systems MUST accept the `.md` extension. If the file contains [front matter](https://jekyllrb.com/docs/front-matter/), AI systems MUST parse the front matter and use it as properties.
 
 **Front matter parser requirements**
-
 Front matter is YAML configuration in between two `---` lines that reside as the very first content in a file. For consistency, these basic requirements MUST be followed. When scanning the first line of a file, if the full contents of the first line is `---` then we consider this file as having front matter. If the file starts with `---`, the parser should continue to scan lines until it finds the next line that contains only `---`. All of the lines between these two `---` lines should be inputted as they are written to a YAML parser to translate the configuration into properties usable by the AI system. If the file is considered to include front matter because it starts with `---` but fails to include a closing `---` or has invalid YAML, the parser MAY throw an error.
 
 Example front matter:
@@ -214,12 +213,12 @@ otherProperty:
 ---
 ```
 
-
 #### Context file properties
 
 AI systems MUST use context file properties to filter down the applicable use of context.
 
 Properties individual context files MAY set:
+
 - `description` - OPTIONAL - a description of the context file and where it would be most applicable. Default is empty string. Description SHOULD be oriented towards human consumption and `instructions` SHOULD be oriented towards AI model consumption. If `instructions` is omitted, then `description` MUST be used for AI model consumption.
 - `instructions` - OPTIONAL - instructions for the AI model on how to use the context file. Default is empty string. Instructions SHOULD be oriented towards AI model consumption and `description` SHOULD be oriented towards human consumption. If both `description` and `instructions` are set, then `instructions` MUST be used for AI model consumption.
 - `appliesTo` - OPTIONAL - an array of glob patterns that define the files that the context file is applicable to. Default is `[*]` (all files).
@@ -234,7 +233,6 @@ Properties individual context files MAY set:
 AI systems MAY accept context files with properties other than the ones defined above for backwards compatibility.
 
 AI Systems MAY truncate context files based on their length and the scenarios where they are used.
-
 
 Example context files:
 
@@ -261,7 +259,6 @@ trigger: auto
 Don't use @import for CSS files.
 
 ```
-
 
 ## Migration considerations
 
